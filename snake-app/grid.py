@@ -1,6 +1,6 @@
 
 class Grid:
-    """Grid that the game in played on"""
+    """Grid that the game in played on."""
 
     __slots__ = (
         "size",
