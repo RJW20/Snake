@@ -26,5 +26,6 @@ class Grid:
             self.conversion_table.append(gridline_width + i * (block_width + gridline_width))
 
     def getCoordinates(self, grid_position):
-        """Get screen coordinates from gridpoints"""
+        """Get screen coordinates from gridpoints."""
+
         return(tuple(self.conversion_table[grid_position[i]] for i in range(2)))

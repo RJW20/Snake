@@ -20,6 +20,7 @@ class Food:
         
         Picks position not already in the snake.
         """
+        
         self.position = (self.generator.randint(0, self.available_positions[0]), self.generator.randint(0, self.available_positions[1]))
         while self.position in snake_body:
             self.position = (self.generator.randint(0, self.available_positions[0]), self.generator.randint(0, self.available_positions[1]))

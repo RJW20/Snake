@@ -21,6 +21,7 @@ class Vision:
 
     def setWallOrdinals(self):
         """Set ordinal wall vision."""
+
         self.fr = min(self.f, self.r)
         self.br = min(self.b, self.r)
         self.bl = min(self.b, self.l)
@@ -28,6 +29,7 @@ class Vision:
 
     def turnRight(self):
         """Simulate a right turn."""
+
         #save 2 of the directions
         old_f = self.f
         old_fr = self.fr
@@ -44,6 +46,7 @@ class Vision:
 
     def turnLeft(self):
         """Simulate a left turn."""
+        
         #save 2 of the directions
         old_f = self.f
         old_fl = self.fl
