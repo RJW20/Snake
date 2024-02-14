@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "snake-app"
+version = "0.1.0"
+description = "Python implementation of the game snake"
+authors = ["RJW20"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "snake-app"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pygame = "^2.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
