@@ -70,7 +70,7 @@ def arrow_to_move(direction, key, move):
 def main():
     
     #initialize the grid the game will be modelled from
-    grid = Grid(settings['grid_size'], settings['block_width'], settings['gridline_width'])
+    grid = Grid(settings['grid_size'], settings['block_width'], settings['block_padding'])
 
     #pygame setup
     screen = pygame.display.set_mode(grid.board_size)
