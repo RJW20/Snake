@@ -7,14 +7,14 @@ import numpy as np
 class Distance:
     """Organization of distance to body or food."""
 
-    f: int = np.inf
-    fr: int = np.inf
-    r: int = np.inf
-    br: int = np.inf
-    b: int = np.inf
-    bl: int = np.inf
-    l: int = np.inf
-    fl: int = np.inf
+    f: float = np.inf
+    fr: float = np.inf
+    r: float = np.inf
+    br: float = np.inf
+    b: float = np.inf
+    bl: float = np.inf
+    l: float = np.inf
+    fl: float = np.inf
 
 
 class WallsDistance(Distance):
