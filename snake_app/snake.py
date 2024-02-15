@@ -155,7 +155,7 @@ class Snake:
 
         #if we're on top of the food then we're eating it
         if self.target.position == new_head_position:
-            self.target.newPosition(self.body)
+            self.target.new_position(self.body)
             self.length += 1
         #if we didn't just eat food, remove the end position
         else:

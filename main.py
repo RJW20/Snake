@@ -92,7 +92,8 @@ def main(settings):
         #limit the fps in such a way that it takes 5s to cross the board horizontally
         dt = clock.tick(grid.size[0]/5) / 1000
 
-pygame.quit()
+    pygame.quit()
+
 
 if __name__ == '__main__':
     from settings import settings
