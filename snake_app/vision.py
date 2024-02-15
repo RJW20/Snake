@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from distance import Distance, WallsDistance
+from .distance import Distance, WallsDistance
 
 
 @dataclass

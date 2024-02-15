@@ -2,6 +2,7 @@ import pygame
 
 from snake_app import Grid, Snake
 
+
 def arrow_to_move(direction, key, move):
     """Convert pressed arrow key to direction the snake needs to turn in.
     
