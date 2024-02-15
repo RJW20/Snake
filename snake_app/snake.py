@@ -68,7 +68,7 @@ class Snake:
 
         start_position = self.get_start()
         self.vision.walls.seek(start_position, self.grid_size)
-        self.set_direction(self)
+        self.set_direction()
 
         body = []
         for i in range(0, self.length):

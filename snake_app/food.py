@@ -7,7 +7,7 @@ class Food:
     __slots__ = (
         "available_positions",
         "generator",
-        "positions",
+        "position",
     )
 
     def __init__(self, grid_size):
