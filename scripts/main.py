@@ -1,6 +1,7 @@
 import pygame
 
 from snake_app import Grid, Snake
+from settings import settings
 
 
 def arrow_to_move(direction, key, move):
@@ -37,7 +38,7 @@ def arrow_to_move(direction, key, move):
     return move
 
 
-def main(settings):
+def main():
     
     #initialize the grid the game will be modelled from
     grid = Grid(settings['grid_size'], settings['block_width'], settings['grid_width'])
@@ -93,8 +94,3 @@ def main(settings):
         dt = clock.tick(grid.size[0]/5) / 1000
 
     pygame.quit()
-
-
-if __name__ == '__main__':
-    from settings import settings
-    main(settings)
