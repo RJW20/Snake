@@ -9,7 +9,7 @@ class Snake:
     """Snake that exists on the grid."""
 
     __slots__ = (
-        "grid_size"
+        "grid_size",
         "body",
         "length",
         "direction",
