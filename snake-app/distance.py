@@ -20,6 +20,17 @@ class Distance:
 class WallsDistance(Distance):
     """Organization of distance to walls."""
 
+    def seek(self, head_position, grid_size):
+        """Looks for the walls manually.
+        
+        The snake will always be pointing up (0,-1) when this is called.
+        """
+        self.f = head_position[1] + 1
+        self.r = grid_size[0] - head_position[0]
+        self.b = grid_size[1] - head_position[1]
+        self.l = head_position[0] + 1
+        self.set_ordinals()
+
     def set_ordinals(self):
         """Set ordinal wall vision."""
 

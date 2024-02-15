@@ -10,10 +10,9 @@ class Food:
         "positions",
     )
 
-    def __init__(self, grid_size, snake_body):
+    def __init__(self, grid_size):
         self.available_positions = grid_size
         self.generator = np.random
-        self.new_position(snake_body)
 
     #randomize a new position on the grid, thats not already in the snake (might blow up in time when snake gets big)
     def new_position(self, snake_body):
