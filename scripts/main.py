@@ -41,7 +41,7 @@ def arrow_to_move(direction, key, move):
 def main():
     
     #initialize the grid the game will be modelled from
-    grid = Grid(settings['grid_size'], settings['block_width'], settings['grid_width'])
+    grid = Grid(settings['grid_size'], settings['block_width'], settings['gridline_width'])
 
     #pygame setup
     screen = pygame.display.set_mode(grid.board_size)
@@ -75,7 +75,7 @@ def main():
         snake.move(move)
 
         #check if we've died
-        if snake.dead:
+        if snake.is_dead:
             running = False
             break
 
@@ -83,9 +83,9 @@ def main():
         screen.fill((40,40,40))
 
         #visualize the snake and food on the screen
-        pygame.draw.rect(screen, 'red', pygame.Rect(grid.get_coordinates(snake.target.position), (grid.block_width, grid.block_width)))
+        pygame.draw.rect(screen, 'red', pygame.Rect(grid.gridpoint_to_coordinates(snake.target.position), (grid.block_width, grid.block_width)))
         for pos in snake.body:
-            pygame.draw.rect(screen, 'green', pygame.Rect(grid.get_coordinates(pos), (grid.block_width, grid.block_width)))
+            pygame.draw.rect(screen, 'green', pygame.Rect(grid.gridpoint_to_coordinates(pos), (grid.block_width, grid.block_width)))
 
         #display the changes
         pygame.display.flip()

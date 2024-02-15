@@ -162,6 +162,6 @@ class Snake:
             self.body.pop()
 
     @property
-    def dead(self):
+    def is_dead(self):
         if self.vision.walls.f == 1: return True    #if hit a wall
         if self.body.count(self.body[0]) == 2: return True     #if hit own body 

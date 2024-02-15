@@ -5,8 +5,8 @@ from snake_app import Grid, Snake
 from settings import settings
 
 
-def get_adjusted_centre_coordinates(pos, grid, dir):
-    coords = grid.get_coordinates(pos)
+def gridpoint_to_adjusted_centre_coordinates(pos, grid, dir):
+    coords = grid.gridpoint_to_coordinates(pos)
     match(dir):
         case (0,-1):
             return((int(coords[0] + 0.5*grid.block_width), coords[1]))
@@ -26,8 +26,8 @@ def get_adjusted_centre_coordinates(pos, grid, dir):
             return(coords)
 
 
-def get_centre_coordinates(pos, grid):
-    coords = grid.get_coordinates(pos)
+def gridpoint_to_centre_coordinates(pos, grid):
+    coords = grid.gridpoint_to_coordinates(pos)
     return((int(coords[0] + 0.5*grid.block_width), int(coords[1] + 0.5*grid.block_width)))
 
 
@@ -68,7 +68,7 @@ def arrow_to_move(direction, key, move):
 def main():
     
     #initialize the grid the game will be modelled from
-    grid = Grid(settings['grid_size'], settings['block_width'], settings['grid_width'])
+    grid = Grid(settings['grid_size'], settings['block_width'], settings['gridline_width'])
 
     #pygame setup
     screen = pygame.display.set_mode(grid.board_size)
@@ -110,7 +110,7 @@ def main():
         snake.move(move)
 
         #check if we've died
-        if snake.dead:
+        if snake.is_dead:
             running = False
             break
 
@@ -122,24 +122,24 @@ def main():
         screen.fill((40,40,40))
 
         #visualize the snake and food on the screen
-        pygame.draw.rect(screen, 'red', pygame.Rect(grid.get_coordinates(snake.target.position), (grid.block_width, grid.block_width)))
+        pygame.draw.rect(screen, 'red', pygame.Rect(grid.gridpoint_to_coordinates(snake.target.position), (grid.block_width, grid.block_width)))
         for pos in snake.body:
-            pygame.draw.rect(screen, 'green', pygame.Rect(grid.get_coordinates(pos), (grid.block_width, grid.block_width)))
+            pygame.draw.rect(screen, 'green', pygame.Rect(grid.gridpoint_to_coordinates(pos), (grid.block_width, grid.block_width)))
 
         #choose what lines to draw
         direction = snake.direction
         direction_right = (direction[0] - direction[1], direction[0] + direction[1])
-        start = get_centre_coordinates(snake.body[0], grid)
+        start = gridpoint_to_centre_coordinates(snake.body[0], grid)
         match(line_type):
             case 'walls':
                 #draw lines from center of head to walls
                 for d, distance in vars(snake.vision.walls).items():
                     match(d):
                         case 'f' | 'r' | 'b' | 'l':
-                            end = get_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction), distance - 1))), grid, direction)
+                            end = gridpoint_to_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction), distance - 1))), grid, direction)
                             direction = (-direction[1], direction[0])
                         case 'fr' | 'br' | 'bl' | 'fl':
-                            end = get_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction_right), distance - 1))), grid, direction_right)
+                            end = gridpoint_to_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction_right), distance - 1))), grid, direction_right)
                             direction_right = (-direction_right[1], direction_right[0])
                     pygame.draw.aaline(screen, 'purple', start, end)
 
@@ -148,10 +148,10 @@ def main():
                 for d, distance in vars(snake.vision.food).items():
                     match(d):
                         case 'f' | 'r' | 'b' | 'l':
-                            end = get_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction)
+                            end = gridpoint_to_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction)
                             direction = (-direction[1], direction[0])
                         case 'fr' | 'br' | 'bl' | 'fl':
-                            end = get_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction_right), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction_right)
+                            end = gridpoint_to_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction_right), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction_right)
                             direction_right = (-direction_right[1], direction_right[0])
                     pygame.draw.aaline(screen, 'yellow', start, end)
 
@@ -160,10 +160,10 @@ def main():
                 for d, distance in vars(snake.vision.body).items():
                     match(d):
                         case 'f' | 'r' | 'b' | 'l':
-                            end = get_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction)
+                            end = gridpoint_to_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction)
                             direction = (-direction[1], direction[0])
                         case 'fr' | 'br' | 'bl' | 'fl':
-                            end = get_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction_right), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction_right)
+                            end = gridpoint_to_adjusted_centre_coordinates(tuple(np.add(np.array(snake.body[0]), np.multiply(np.array(direction_right), min(distance - 1, getattr(snake.vision.walls, d) - 1)))), grid, direction_right)
                             direction_right = (-direction_right[1], direction_right[0])
                     pygame.draw.aaline(screen, 'blue', start, end)
 
