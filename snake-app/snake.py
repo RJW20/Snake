@@ -11,9 +11,7 @@ class Snake:
         "length",
         "direction",
         "target",
-        "wall_distance",
-        "food_distance",
-        "body_distance",
+        "vision,"
     )
 
     def __init__(self, grid_size, length = 3):

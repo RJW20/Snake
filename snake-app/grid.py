@@ -1,4 +1,5 @@
 
+
 class Grid:
     """Grid that the game in played on."""
 
@@ -25,7 +26,7 @@ class Grid:
         for i in range(max(self.size)):
             self.conversion_table.append(gridline_width + i * (block_width + gridline_width))
 
-    def getCoordinates(self, grid_position):
+    def get_coordinates(self, grid_position):
         """Get screen coordinates from gridpoints."""
 
         return(tuple(self.conversion_table[grid_position[i]] for i in range(2)))
