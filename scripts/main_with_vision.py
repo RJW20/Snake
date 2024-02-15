@@ -1,3 +1,5 @@
+"""Usual snake game but by pressing SPACE you can iterate the snake's three types of vision."""
+
 import pygame
 import numpy as np
 
@@ -72,6 +74,7 @@ def main():
 
     #pygame setup
     screen = pygame.display.set_mode(grid.board_size)
+    pygame.display.set_caption("Snake")
     clock = pygame.time.Clock()
     running = True
     dt = 0

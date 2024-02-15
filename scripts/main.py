@@ -45,6 +45,7 @@ def main():
 
     #pygame setup
     screen = pygame.display.set_mode(grid.board_size)
+    pygame.display.set_caption("Snake")
     clock = pygame.time.Clock()
     running = True
     dt = 0
