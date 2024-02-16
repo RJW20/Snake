@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .distance import Distance, WallsDistance
 
@@ -11,12 +11,6 @@ class Vision:
     If the head can't see something, the distance is considered to be np.inf.
     """
 
-    walls: WallsDistance = None
-    food: Distance = None
-    body: Distance = None
-
-    def __post_init__(self):
-        self.walls = WallsDistance()
-        self.food = Distance()
-        self.body = Distance()
-
+    walls: WallsDistance = field(default_factory=WallsDistance)
+    food: Distance = field(default_factory=Distance)
+    body: Distance = field(default_factory=Distance)
