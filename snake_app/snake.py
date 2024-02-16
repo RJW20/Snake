@@ -25,50 +25,55 @@ class Snake:
 
         self.target = Food(self.grid_size)
         self.vision = Vision()
-        self.set_starting_state()
+        self.start_state()
 
-    def get_start(self) -> tuple:
-        """Get a random start position on the grid.
+    def start_position(self) -> tuple:
+        """Return a random start position on the grid.
         
         Can't be in squares with size self.length-1 in the corners.
         """
 
-        start = (0,0)
-        while ((start[0] < self.length) and (start[1] < self.length or start[1] > self.grid_size[1] - self.length)) or\
-              ((start[0] > self.grid_size[0] - self.length) and (start[1] < self.length or start[1] > self.grid_size[1] - self.length)):
-            start = (np.random.randint(0, self.grid_size[0] - 1), np.random.randint(0, self.grid_size[1] - 1))
-        return start
+        start_pos = (0,0)
+        while ((start_pos[0] < self.length) and (start_pos[1] < self.length or start_pos[1] > self.grid_size[1] - self.length)) or\
+              ((start_pos[0] > self.grid_size[0] - self.length) and (start_pos[1] < self.length or start_pos[1] > self.grid_size[1] - self.length)):
+            start_pos = (np.random.randint(0, self.grid_size[0] - 1), np.random.randint(0, self.grid_size[1] - 1))
+        return start_pos
     
-    def set_direction(self):
-        """Set initial direction parallel to closest wall, pointing to furthest wall in that direction."""
+    def start_direction(self):
+        """Return the direction parallel to closest wall, pointing to furthest wall in that direction.
+        
+        Also reorients vision.walls.
+        """
 
-        self.direction = (0,-1)
+        start_dir = (0,-1)
         if min(self.vision.walls.f, self.vision.walls.b) <= min(self.vision.walls.l, self.vision.walls.r):
             #direction is right or left
             if self.vision.walls.r >= self.vision.walls.l:
-                self.direction = (1,0)
+                start_dir = (1,0)
                 self.vision.walls.turn_right()
             else:
-                self.direction = (-1,0)
+                start_dir = (-1,0)
                 self.vision.walls.turn_left()
         else:
             #direction is up or down
             if self.vision.walls.f >= self.vision.walls.b:
-                self.direction = (0,-1)
+                start_dir = (0,-1)
             else:
-                self.direction = (0,1)
+                start_dir = (0,1)
                 self.vision.walls.turn_right()
                 self.vision.walls.turn_right()
+
+        return start_dir
     
-    def set_starting_state(self):
+    def start_state(self):
         """Get the snake in a state to begin the game.
         
         Gets the starting position, initializes vision.walls, sets the starting direction, populates the body, places the food.
         """
 
-        start_position = self.get_start()
+        start_position = self.start_position()
         self.vision.walls.seek(start_position, self.grid_size)
-        self.set_direction()
+        self.direction = self.start_direction()
 
         body = []
         for i in range(0, self.length):
