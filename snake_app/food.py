@@ -4,13 +4,9 @@ import numpy as np
 class Food:
     """Food on the grid."""
 
-    __slots__ = (
-        "available_positions",
-        "position",
-    )
-
     def __init__(self, grid_size):
         self.available_positions = grid_size
+        self.position = None
 
     def new_position(self, snake_body):
         """Randomize new position on the grid.
