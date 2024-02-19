@@ -1,8 +1,8 @@
 import numpy as np
 from collections import deque
 
-from .food import Food
-from .vision import Vision
+from snake_app.food import Food
+from snake_app.vision import Vision
 
 
 class Snake:

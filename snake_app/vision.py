@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .distance import Distance, WallsDistance
+from snake_app.distance import Distance, WallsDistance
 
 
 @dataclass
