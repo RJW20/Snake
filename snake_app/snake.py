@@ -25,7 +25,6 @@ class Snake:
 
         self.target = Food(self.grid_size)
         self.vision = Vision()
-        self.start_state()
 
     def start_position(self) -> tuple:
         """Return a random start position on the grid.

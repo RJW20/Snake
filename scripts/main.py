@@ -52,6 +52,7 @@ def main():
 
     #initialize the snake
     snake = Snake(settings['grid_size'], settings['length'])
+    snake.start_state()
 
     while running:
 
