@@ -8,23 +8,18 @@ from snake_app.vision import Vision
 class Snake:
     """Snake that exists on the grid."""
 
-    __slots__ = (
-        "grid_size",
-        "body",
-        "length",
-        "direction",
-        "target",
-        "vision",
-    )
-
     def __init__(self, grid_size, length = 3):
         self.grid_size = grid_size
 
         #stop initial snake starting with some body outside the grid
-        self.length = min(length, min(self.grid_size) // 2)
+        self.start_length = min(length, min(self.grid_size) // 2)
 
         self.target = Food(self.grid_size)
         self.vision = Vision()
+
+    @property
+    def length(self):
+        return len(self.body)
 
     def start_position(self) -> tuple:
         """Return a random start position on the grid.
@@ -75,7 +70,7 @@ class Snake:
         self.direction = self.start_direction()
 
         body = []
-        for i in range(0, self.length):
+        for i in range(0, self.start_length):
             body.append(tuple(np.subtract(np.array(start_position), np.multiply(np.array(self.direction), i))))
         self.body = deque(body)
 
