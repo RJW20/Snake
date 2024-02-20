@@ -18,6 +18,7 @@ class Snake:
         self.direction = None
         self.target = Food(self.grid_size)
         self.vision = Vision()
+        self.score: int
 
     @property
     def length(self):
@@ -66,6 +67,8 @@ class Snake:
         
         Gets the starting position, initializes vision.walls, sets the starting direction, populates the body, places the food.
         """
+        
+        self.score = 0
 
         start_position = self.start_position()
         self.vision.walls.seek(start_position, self.grid_size)
@@ -157,6 +160,7 @@ class Snake:
         #if we're on top of the food then we're eating it
         if self.target.position == new_head_position:
             self.target.new_position(self.body)
+            self.score += 1
         #if we didn't just eat food, remove the end position
         else:
             self.body.pop()
