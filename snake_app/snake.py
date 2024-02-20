@@ -30,8 +30,8 @@ class Snake:
         """
 
         start_pos = (0,0)
-        while ((start_pos[0] < self.length) and (start_pos[1] < self.length or start_pos[1] > self.grid_size[1] - self.length)) or\
-              ((start_pos[0] > self.grid_size[0] - self.length) and (start_pos[1] < self.length or start_pos[1] > self.grid_size[1] - self.length)):
+        while ((start_pos[0] < self.start_length) and (start_pos[1] < self.start_length or start_pos[1] > self.grid_size[1] - self.start_length)) or\
+              ((start_pos[0] > self.grid_size[0] - self.start_length) and (start_pos[1] < self.start_length or start_pos[1] > self.grid_size[1] - self.start_length)):
             start_pos = (np.random.randint(0, self.grid_size[0] - 1), np.random.randint(0, self.grid_size[1] - 1))
         return start_pos
     
