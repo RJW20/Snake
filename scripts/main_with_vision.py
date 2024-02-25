@@ -102,7 +102,7 @@ def main():
             
             #change direction (in allowed directions)
             if event.type == pygame.KEYDOWN:
-                if key_pressed == False:
+                if not key_pressed:
                     key_pressed = True
                     move = arrow_to_move(snake.direction, event.key, move)
                     if event.key == pygame.K_SPACE:
