@@ -48,7 +48,6 @@ def main():
     pygame.display.set_caption("Snake")
     clock = pygame.time.Clock()
     running = True
-    dt = 0
 
     #initialize the snake
     snake = Snake(settings['grid_size'], settings['length'])
@@ -93,6 +92,6 @@ def main():
         pygame.display.flip()
 
         #limit the fps in such a way that it takes 5s to cross the board horizontally
-        dt = clock.tick(grid.size[0]/5) / 1000
+        clock.tick(grid.size[0]/5) / 1000
 
     pygame.quit()
