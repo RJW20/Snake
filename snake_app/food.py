@@ -1,7 +1,7 @@
 import random
 from collections import deque
 
-from cartesian import Point
+from snake_app.cartesian import Point
 
 
 class Food:

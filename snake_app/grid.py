@@ -1,6 +1,6 @@
 from functools import cached_property
 
-from cartesian import Point
+from snake_app.cartesian import Point
 
 class Grid:
     """Grid that the game in played on."""
