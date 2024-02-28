@@ -13,7 +13,6 @@ pygame = "^2.5.2"
 
 [tool.poetry.scripts]
 main = "scripts.main:main"
-main_with_vision = "scripts.main_with_vision:main"
 
 [build-system]
 requires = ["poetry-core"]
