@@ -1,19 +1,22 @@
-import numpy as np
+import random
+from collections import deque
+
+from cartesian import Point
 
 
 class Food:
     """Food on the grid."""
 
-    def __init__(self, grid_size):
-        self.available_positions = grid_size
-        self.position = None
+    def __init__(self, grid_size: tuple[int, int]) -> None:
+        self.available_positions: tuple[int, int] = grid_size
+        self.position: Point
 
-    def new_position(self, snake_body):
+    def new_position(self, snake_body: deque[Point]) -> None:
         """Randomize new position on the grid.
         
         Picks position not already in the snake.
         """
 
-        self.position = (np.random.randint(0, self.available_positions[0]), np.random.randint(0, self.available_positions[1]))
+        self.position = (random.randint(0, self.available_positions[0] - 1), random.randint(0, self.available_positions[1] - 1))
         while self.position in snake_body:
-            self.position = (np.random.randint(0, self.available_positions[0]), np.random.randint(0, self.available_positions[1]))
+            self.position = (random.randint(0, self.available_positions[0] - 1), random.randint(0, self.available_positions[1] - 1))
