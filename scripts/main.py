@@ -1,38 +1,43 @@
+from typing import Literal
+
 import pygame
 
 from snake_app import Grid, Snake
+from snake_app.cartesian import Direction
 from settings import settings
 
 
-def arrow_to_move(direction, key, move):
+def arrow_to_move(direction: Direction, key: pygame.key) -> Literal['forward', 'right', 'left']:
     """Convert pressed arrow key to direction the snake needs to turn in.
     
     Can only stay moving forward or turn left or turn right.
     """
 
+    move = 'forward'
+
     if key == pygame.K_UP:
         match(direction):
-            case (-1,0):
+            case Direction.W:
                 move = 'right'
-            case (1,0):
+            case Direction.E:
                 move = 'left'
     elif key == pygame.K_DOWN:
         match(direction):
-            case (1,0):
+            case Direction.E:
                 move = 'right'
-            case (-1,0):
+            case Direction.W:
                 move = 'left'
     elif key == pygame.K_RIGHT:
         match(direction):
-            case (0,-1):
+            case Direction.N:
                 move = 'right'
-            case (0,1):
+            case Direction.S:
                 move = 'left'
     elif key == pygame.K_LEFT:
         match(direction):
-            case (0,1):
+            case Direction.S:
                 move = 'right'
-            case (0,-1):
+            case Direction.N:
                 move = 'left'
 
     return move
@@ -44,7 +49,7 @@ def main():
     grid = Grid(settings['grid_size'], settings['block_width'], settings['block_padding'])
 
     #pygame setup
-    screen = pygame.display.set_mode(grid.board_size)
+    screen = pygame.display.set_mode(grid.screen_size)
     pygame.display.set_caption("Snake")
     clock = pygame.time.Clock()
     running = True
@@ -52,6 +57,7 @@ def main():
     #initialize the snake
     snake = Snake(settings['grid_size'], settings['length'])
     snake.start_state()
+    speed = grid.size[0] / 4    #limit the fps in such a way that it takes 4s to cross the board horizontally
 
     while running:
 
@@ -69,10 +75,9 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if not key_pressed:
                     key_pressed = True
-                    move = arrow_to_move(snake.direction, event.key, move)
+                    move = arrow_to_move(snake.direction, event.key)
             
         #move in the chosen direction
-        snake.look()
         snake.move(move)
 
         #check if we've died
@@ -90,8 +95,6 @@ def main():
 
         #display the changes
         pygame.display.flip()
-
-        #limit the fps in such a way that it takes 5s to cross the board horizontally
-        clock.tick(grid.size[0]/5) / 1000
+        clock.tick(speed)
 
     pygame.quit()

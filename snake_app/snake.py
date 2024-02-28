@@ -1,5 +1,6 @@
 import random
 from collections import deque
+from typing import Literal
 
 from snake_app.cartesian import Point, Slope, Direction
 from snake_app.food import Food
@@ -62,17 +63,17 @@ class Snake:
         """
         
         start_position = self.start_position()
-        self.direction = self.start_direction()
+        self.direction = self.start_direction(start_position)
 
         body = []
         for i in range(0, self.start_length):
-            body.append(start_position + i * self.direction.value)
+            body.append(start_position - self.direction.value * i)
         self.body = deque(body)
 
         self.target.new_position(self.body)
         self.score = 0
 
-    def move(self, move: str) -> None:
+    def move(self, move: Literal['forward', 'right', 'left']) -> None:
         """Move the snake, increase length and re-position food if on top of it."""
 
         #reorient the snake's direction if changed

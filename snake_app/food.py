@@ -17,6 +17,6 @@ class Food:
         Picks position not already in the snake.
         """
 
-        self.position = (random.randint(0, self.available_positions[0] - 1), random.randint(0, self.available_positions[1] - 1))
+        self.position = Point(random.randint(0, self.available_positions[0] - 1), random.randint(0, self.available_positions[1] - 1))
         while self.position in snake_body:
-            self.position = (random.randint(0, self.available_positions[0] - 1), random.randint(0, self.available_positions[1] - 1))
+            self.position = Point(random.randint(0, self.available_positions[0] - 1), random.randint(0, self.available_positions[1] - 1))
