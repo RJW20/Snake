@@ -10,7 +10,6 @@ packages = [{include = "snake_app"}]
 [tool.poetry.dependencies]
 python = "^3.12"
 pygame = "^2.5.2"
-numpy = "^1.26.4"
 
 [tool.poetry.scripts]
 main = "scripts.main:main"
