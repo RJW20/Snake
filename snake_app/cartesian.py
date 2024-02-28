@@ -38,6 +38,9 @@ class Slope:
         self.run = run
         self.rise = rise
 
+    def __mul__(self, other: int) -> Slope:
+        return Slope(self.run * other, self.rise * other)
+
 
 class Direction(Enum):
     """Possible directions for snake to travel in."""

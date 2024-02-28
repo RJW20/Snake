@@ -1,160 +1,89 @@
-import numpy as np
+import random
 from collections import deque
 
+from snake_app.cartesian import Point, Slope, Direction
 from snake_app.food import Food
-from snake_app.vision import Vision
 
 
 class Snake:
     """Snake that exists on the grid."""
 
-    def __init__(self, grid_size, length = 3):
-        self.grid_size = grid_size
-
-        #stop initial snake starting with some body outside the grid
-        self.start_length = min(length, min(self.grid_size) // 2)
-
-        self.body = deque([])
-        self.direction = None
-        self.target = Food(self.grid_size)
-        self.vision = Vision()
+    def __init__(self, grid_size: tuple[int, int], start_length: int = 3):
+        self.grid_size: tuple[int, int] = grid_size
+        self.start_length: int = min(start_length, min(self.grid_size) // 2)  #stop initial snake starting with some body outside the grid
+        self.direction: Direction
+        self.body: deque[Point]
+        self.target: Food = Food(self.grid_size)
         self.score: int
 
-    @property
-    def length(self):
-        return len(self.body)
-
-    def start_position(self) -> tuple:
+    def start_position(self) -> Point:
         """Return a random start position on the grid.
         
-        Can't be in squares with size self.length-1 in the corners.
+        Can't be in squares with size self.length - 1 in the corners.
         """
 
-        start_pos = (0,0)
-        while ((start_pos[0] < self.start_length) and (start_pos[1] < self.start_length or start_pos[1] > self.grid_size[1] - self.start_length)) or\
-              ((start_pos[0] > self.grid_size[0] - self.start_length) and (start_pos[1] < self.start_length or start_pos[1] > self.grid_size[1] - self.start_length)):
-            start_pos = (np.random.randint(0, self.grid_size[0] - 1), np.random.randint(0, self.grid_size[1] - 1))
+        start_pos = Point(0,0)
+        while ((start_pos.x < self.start_length) and (start_pos.y < self.start_length or start_pos.y > self.grid_size[1] - self.start_length)) or\
+              ((start_pos.x > self.grid_size[0] - self.start_length) and (start_pos.y < self.start_length or start_pos.y > self.grid_size[1] - self.start_length)):
+            start_pos = Point(random.randint(0, self.grid_size[0] - 1), random.randint(0, self.grid_size[1] - 1))
         return start_pos
     
-    def start_direction(self):
-        """Return the direction parallel to closest wall, pointing to furthest wall in that direction.
-        
-        Also reorients vision.walls.
+    def start_direction(self, start_pos: Point) -> Direction:
+        """Return the starting direction.
+         
+        Will be parallel to closest wall, pointing to furthest wall in that direction.
         """
 
-        start_dir = (0,-1)
-        if min(self.vision.walls.f, self.vision.walls.b) <= min(self.vision.walls.l, self.vision.walls.r):
-            #direction is right or left
-            if self.vision.walls.r >= self.vision.walls.l:
-                start_dir = (1,0)
-                self.vision.walls.turn_right()
+        #get N,E,S,W distance to walls
+        N_dist = start_pos.y + 1
+        E_dist = self.grid_size[0] - start_pos.x
+        S_dist = self.grid_size[1] - start_pos.y
+        W_dist = start_pos.x + 1
+
+        if min(N_dist, S_dist) <= min(E_dist, W_dist):
+            #direction is east or west
+            if E_dist >= W_dist:
+                start_dir = Direction.E
             else:
-                start_dir = (-1,0)
-                self.vision.walls.turn_left()
+                start_dir = Direction.W
         else:
             #direction is up or down
-            if self.vision.walls.f >= self.vision.walls.b:
-                start_dir = (0,-1)
+            if N_dist >= S_dist:
+                start_dir = Direction.N
             else:
-                start_dir = (0,1)
-                self.vision.walls.turn_right()
-                self.vision.walls.turn_right()
+                start_dir = Direction.S
 
         return start_dir
     
-    def start_state(self):
+    def start_state(self) -> None:
         """Get the snake in a state to begin the game.
         
-        Gets the starting position, initializes vision.walls, sets the starting direction, populates the body, places the food.
+        Gets the starting position, sets the starting direction, populates the body, places the food.
         """
         
-        self.score = 0
-
         start_position = self.start_position()
-        self.vision.walls.seek(start_position, self.grid_size)
         self.direction = self.start_direction()
 
         body = []
         for i in range(0, self.start_length):
-            body.append(tuple(np.subtract(np.array(start_position), np.multiply(np.array(self.direction), i))))
+            body.append(start_position + i * self.direction.value)
         self.body = deque(body)
 
         self.target.new_position(self.body)
+        self.score = 0
 
-        #step the walls vision back one as the first thing we do is look which advances it
-        self.vision.walls.f += 1
-        self.vision.walls.b -= 1
-        self.vision.walls.set_ordinals()
-
-    def look_in_direction(self, search_direction: tuple[int,int], ordinal: bool, max_sight: int, food_position: tuple[int,int], food_found: bool, body: deque[tuple[int,int]]) -> tuple[bool,float,float]:
-        """Return the distance to food, to self, and whether or not the food was found so we know to stop looking for it."""
-
-        dist_to_food = np.inf
-        dist_to_body = np.inf
-        body_found = False
-        search_position = self.body[0]
-
-        #can't start by looking at the head
-        search_position = tuple(np.add(np.array(search_position), np.array(search_direction)))
-        distance = 1
-
-        #observe food in space next to food in direction the snake is heading, this allows the snake to track down food on diagonals (only do it in ordinals)  
-        if ordinal: phantom_food_position = tuple(np.add(np.array(food_position), np.array(self.direction)))
-
-        #look until at the wall
-        while distance < max_sight:
-            if not food_found:
-                if search_position == food_position or (ordinal and search_position == phantom_food_position):  
-                    dist_to_food = distance
-                    food_found = True
-            if not body_found and search_position in body:
-                dist_to_body = distance
-                body_found = True
-            
-            search_position = tuple(np.add(np.array(search_position), np.array(search_direction)))
-            distance += 1
-
-        return (food_found, dist_to_food, dist_to_body)
-
-    def look(self):
-        """Set the snakes vision."""
-
-        #walls
-        self.vision.walls.f -= 1
-        self.vision.walls.b += 1
-        self.vision.walls.set_ordinals()
-
-        #search valid directions for food and body, using matrix transfomation to rotate around
-        aim = self.direction
-        ordinal_aim = (aim[0] - aim[1], aim[0] + aim[1])
-        food_found = False
-        for d, distance in vars(self.vision.walls).items():
-            match(d):
-                case 'f' | 'r' | 'b' | 'l':
-                    food_found, dist_to_food, dist_to_body = self.look_in_direction(aim, False, distance, self.target.position, food_found, self.body)
-                    setattr(self.vision.food, d, dist_to_food)
-                    setattr(self.vision.body, d, dist_to_body)
-                    aim = (-aim[1], aim[0])
-                case 'fr' | 'br' | 'bl' | 'fl':
-                    food_found, dist_to_food, dist_to_body = self.look_in_direction(ordinal_aim, True, distance, self.target.position, food_found, self.body)
-                    setattr(self.vision.food, d, dist_to_food)
-                    setattr(self.vision.body, d, dist_to_body)
-                    ordinal_aim = (-ordinal_aim[1], ordinal_aim[0])
-
-    def move(self, move: str):
+    def move(self, move: str) -> None:
         """Move the snake, increase length and re-position food if on top of it."""
 
         #reorient the snake's direction if changed
         match(move):
             case 'right':
-                self.vision.walls.turn_right()
-                self.direction = (-self.direction[1], self.direction[0])
+                self.direction = Direction(Slope(-self.direction.value.rise, self.direction.value.run))
             case 'left':
-                self.vision.walls.turn_left()
-                self.direction = (self.direction[1], -self.direction[0])
+                self.direction = Direction(Slope(self.direction.value.rise, -self.direction.value.run))
 
         #add a new position to the front of the snake
-        new_head_position = tuple(np.add(np.array(self.body[0]), np.array(self.direction)))
+        new_head_position = self.body[0] + self.direction.value
         self.body.appendleft(new_head_position)
 
         #if we're on top of the food then we're eating it
@@ -166,6 +95,23 @@ class Snake:
             self.body.pop()
 
     @property
+    def hit_wall(self) -> bool:
+        """Return True if snake has hit a wall.
+        
+        Only have to check head because the body follows the head.
+        """
+
+        head_pos = self.body[0]
+        return head_pos.x < 0 or head_pos.y < 0 or head_pos.x >= self.grid_size[0] or head_pos.y >= self.grid_size[1]
+    
+    @property
+    def hit_body(self) -> bool:
+        """Return True if snake has hit its own body."""
+
+        return self.body.count(self.body[0]) == 2
+
+    @property
     def is_dead(self):
-        if self.vision.walls.f == 1: return True    #if hit a wall
-        if self.body.count(self.body[0]) == 2: return True     #if hit own body 
+        """Return True if snake has hit a wall or itself."""
+
+        return self.hit_wall or self.hit_body
