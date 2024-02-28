@@ -1,13 +1,14 @@
 from __future__ import annotations
+from dataclasses import dataclass
 from enum import Enum
 
 
+@dataclass(frozen=True)
 class Point:
     """(x, y) point on the grid."""
 
-    def __init__(self, x: int, y: int) -> None:
-        self.x = x
-        self.y = y
+    x: int
+    y: int
 
     def __add__(self, other: Point | Slope) -> Point:
         if isinstance(other, Point):
@@ -31,15 +32,18 @@ class Point:
         return self.x == other.x and self.y == other.y
 
 
+@dataclass(frozen=True)
 class Slope:
     """(d_x, d_y) vector on the grid."""
 
-    def __init__(self, run: int, rise: int) -> None:
-        self.run = run
-        self.rise = rise
+    run: int
+    rise: int
 
     def __mul__(self, other: int) -> Slope:
         return Slope(self.run * other, self.rise * other)
+    
+    def __eq__(self, other: Slope) -> bool:
+        return self.run == other.run and self.rise == other.rise
 
 
 class Direction(Enum):
