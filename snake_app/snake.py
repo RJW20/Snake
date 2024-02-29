@@ -11,7 +11,7 @@ class Snake:
 
     def __init__(self, grid_size: tuple[int, int], start_length: int = 3):
         self.grid_size: tuple[int, int] = grid_size
-        self.start_length: int = min(start_length, min(self.grid_size) // 2)  #stop initial snake starting with some body outside the grid
+        self.start_length: int = max(min(start_length, min(self.grid_size) // 2), 3)  #stop initial snake starting with some body outside the grid
         self.direction: Direction
         self.body: deque[Point]
         self.target: Food = Food(self.grid_size)
