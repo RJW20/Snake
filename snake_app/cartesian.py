@@ -10,23 +10,25 @@ class Point:
     x: int
     y: int
 
-    def __add__(self, other: Point | Slope) -> Point:
+    def __add__(self, other: Point | Slope) -> Point | Slope:
         if isinstance(other, Point):
             diff_x = self.x + other.x
             diff_y = self.y + other.y
+            return Slope(diff_x, diff_y)
         elif isinstance(other, Slope):
             diff_x = self.x + other.run
             diff_y = self.y + other.rise
-        return Point(diff_x, diff_y)
+            return Point(diff_x, diff_y)
     
-    def __sub__(self, other: Point | Slope) -> Point:
+    def __sub__(self, other: Point | Slope) -> Point | Slope:
         if isinstance(other, Point):
             diff_x = self.x - other.x
             diff_y = self.y - other.y
+            return Slope(diff_x, diff_y)
         elif isinstance(other, Slope):
             diff_x = self.x - other.run
             diff_y = self.y - other.rise
-        return Point(diff_x, diff_y)
+            return Point(diff_x, diff_y)
     
     def __eq__(self, other: Point) -> bool:
         return self.x == other.x and self.y == other.y
