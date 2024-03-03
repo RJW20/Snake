@@ -1,6 +1,8 @@
 # Snake
 A python implementation of the the game Snake using [pygame](https://www.pygame.org/docs/).
 
+![alt text](https://i.imgur.com/KSBw9z2.png "Snake")
+
 ## Basic Requirements
 1. [Python](https://www.python.org/downloads/).
 2. [Poetry](https://python-poetry.org/docs/) for ease of installing the dependencies.
