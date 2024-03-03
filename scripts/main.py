@@ -57,7 +57,7 @@ def main():
     #initialize the snake
     snake = Snake(settings['grid_size'], settings['start_length'])
     snake.start_state()
-    speed = 5
+    speed = settings['speed']
 
     while running:
 
