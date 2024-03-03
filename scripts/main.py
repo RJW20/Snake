@@ -57,7 +57,7 @@ def main():
     #initialize the snake
     snake = Snake(settings['grid_size'], settings['start_length'])
     snake.start_state()
-    speed = grid.size[0] / 4    #limit the fps in such a way that it takes 4s to cross the board horizontally
+    speed = 5
 
     while running:
 
