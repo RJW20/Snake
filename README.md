@@ -16,6 +16,7 @@ A python implementation of the the game Snake using [pygame](https://www.pygame.
    - `block_width` is the width in pixels of a block.
    - `block_padding` is the number of pixels that make up the gap between blocks.
    - `start_length` is the number of blocks the snake starts with.
+   - `speed` is the number of frames per second the game runs at.
 2. Run the game with `poetry run main`.
 3. Use the arrow keys to change the snake's direction as appropriate.
 
